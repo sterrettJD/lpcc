@@ -26,11 +26,32 @@ These commands were run from my desktop.
 
 ```bash
 sudo apt install nfs-kernel-server
-sudo mkdir -p /srv/shared
-echo '/srv/shared <AIR_TAILSCALE_IP>(rw,sync,no_subtree_check)' | sudo tee -a /etc/exports
-sudo exportfs -ra
-sudo ufw allow in on tailscale0 to any port 2049
+sudo mkdir -p /srv/fast 
+sudo chown john:john /srv/fast # file permissions
+sudo mkdir -p /mnt/data/shared && sudo chown john:john /mnt/data/shared
+sudo mkdir -p /shared/fast /shared/bulk
+```
 
+Add the following to /etc/exports, so that other devices can see them
+```
+/srv/fast          100.64.0.0/10(rw,sync,no_subtree_check)
+/mnt/data/shared   100.64.0.0/10(rw,sync,no_subtree_check)
+```
+
+Run the following to set up exports:
+```bash
+sudo exportfs -ra
+```
+
+Add the following to `/etc/fstab` to configure the mounts:
+```
+/srv/fast         /shared/fast  none  bind  0 0
+/mnt/data/shared  /shared/bulk  none  bind,nofail,x-systemd.requires-mounts-for=/mnt/data  0 0
+```
+
+Then mount:
+```bash
+sudo systemctl daemon-reload && sudo mount -a
 ```
 
 # 3. Configure Macbook Air to have access to shared filesystem
@@ -39,8 +60,50 @@ Commands run from macbook air
 
 ```bash
 sudo apt install nfs-common
-sudo mkdir -p /mnt/shared
+sudo mkdir -p /shared/fast /shared/bulk
+```
 
-echo '100.79.213.117:/srv/shared /mnt/shared nfs4 _netdev,nofail,x-systemd.automount 0 0' | sudo tee -a /etc/fstab
-sudo mount -a
+Add the following lines to /etc/fstab:
+```
+<desktopIP>:/srv/fast         /shared/fast  nfs  defaults,_netdev,x-systemd.automount,x-systemd.requires=tailscaled.service  0  0
+<desktopIP>:/mnt/data/shared  /shared/bulk  nfs  defaults,_netdev,x-systemd.automount,x-systemd.requires=tailscaled.service  0  0
+```
+
+Then mount:
+```bash
+sudo systemctl daemon-reload && sudo mount -a
+```
+
+Running `df -h` should show 
+```
+<desktopIP>:/srv/fast         938G  563G  327G  64% /shared/fast
+<desktopIP>:/mnt/data/shared  458G  128G  307G  30% /shared/bulk
+```
+
+
+
+# 4. Configure Rpi to have access to shared filesystem
+
+Commands run from raspberry pi head node
+
+```bash
+sudo apt install nfs-common
+sudo mkdir -p /shared/fast /shared/bulk
+```
+
+Add the following lines to /etc/fstab:
+```
+<desktopIP>:/srv/fast         /shared/fast  nfs  defaults,_netdev,x-systemd.automount,x-systemd.requires=tailscaled.service  0  0
+<desktopIP>:/mnt/data/shared  /shared/bulk  nfs  defaults,_netdev,x-systemd.automount,x-systemd.requires=tailscaled.service  0  0
+```
+
+Then mount:
+```bash
+sudo systemctl daemon-reload && sudo mount -a
+```
+
+Running `df -h` should show 
+```
+<desktopIP>:/srv/fast         938G  563G  327G  64% /shared/fast
+<desktopIP>:/mnt/data/shared  458G  128G  307G  30% /shared/bulk
 ```
