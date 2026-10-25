@@ -102,7 +102,7 @@ Then mount:
 sudo systemctl daemon-reload && sudo mount -a
 ```
 
-Running `df -h` should show 
+Running `df -h` should show that those mount points are there.
 ```
 <desktopIP>:/srv/fast         938G  563G  327G  64% /shared/fast
 <desktopIP>:/mnt/data/shared  458G  128G  307G  30% /shared/bulk
