@@ -14,6 +14,9 @@ sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.ta
 # lid closed = keep running
 sudo sed -i 's/^#\?HandleLidSwitch.*=.*/HandleLidSwitch=ignore/; s/^#\?HandleLidSwitchExternalPower=.*/HandleLidSwitchExternalPower=ignore/' /etc/systemd/logind.conf
 
+# Turn off backlight
+gsettings set org.gnome.desktop.session idle-delay 60
+
 # stop WiFi power-save dropouts
 printf '[connection]\nwifi.powersave = 2\n' | sudo tee /etc/NetworkManager/conf.d/wifi-powersave.conf
 
