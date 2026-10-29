@@ -1,6 +1,6 @@
 # Low Performance Compute Cluster
 
-This contains setup and maintenance details for my "low performance compute cluster".
+This contains setup and maintenance details for my "low performance compute cluster". Consider it more of a lab notebook for now...
 
 I got the idea to build a homelab bioinformatics (or other) server by cobbling together a couple of computers that on their own would be unimpressive. 
 
