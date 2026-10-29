@@ -1,6 +1,6 @@
 # No battery test
 
-The batter on my 2014 MacBook pro is in bad shape. I'm curious if I can run it without the battery.
+The battery on my 2014 MacBook pro is in bad shape. I'm curious if I can run it without the battery.
 
 ## 0. Dependencies
 
@@ -70,3 +70,30 @@ Core	Avg_MHz	Busy%	Bzy_MHz	PkgTmp	PkgWatt
 ## 2. With battery test after early troubleshooting
 
 I removed the back and cleaned the fans + the rest of the computer. They were quite dusty. Still throttles.
+
+
+## 3. Replace thermal paste
+
+This was my first time replacing thermal paste, but it worked better than I expected!
+I followed [this tutorial](https://www.youtube.com/watch?v=UHcYxtCppng) with TM30 from my neighborhood Walmart.
+
+## 4. Rerun stress test
+I reran the same stress test from before. 
+Notably, CPU isn't throttled like it was before!
+
+```
+Core	Avg_MHz	Busy%	Bzy_MHz	PkgTmp	PkgWatt
+-	    2401	99.77	2412	80	    36.97
+0	    2401	99.78	2412	80	    36.98
+0	    2401	99.78	2412
+1	    2401	99.77	2412
+1	    2401	99.78	2412
+2	    2401	99.77	2412
+2	    2401	99.77	2412
+3	    2401	99.77	2412
+3	    2401	99.77	2412
+```
+
+## 5. Disconnect the battery and boot
+
+Follow steps [here](https://www.youtube.com/watch?v=0nVMJ3w-bm4). In my case, it kept spinning up the fans, starting the screen, then dying. I realized my charger is 45W, which may not be enough for this computer to run without battery. Ordering a new one...
