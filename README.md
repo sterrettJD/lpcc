@@ -28,6 +28,11 @@ flowchart TD
     class comp4 childNodeBAD
 ```
 
+There are 3 main data mounts:
+1. /shared/fast/ (1TB SSD)
+2. /shared/bulk/ (0.5TB HDD ripped out of an old laptop)
+3. /shared/big/ (4TB HDD)
+
 ## Job scheduling
 As of Nov 5, 2026, this cluster is running slurm for job scheduling. 
 
